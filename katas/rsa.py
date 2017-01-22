@@ -1,5 +1,8 @@
 from functools import wraps
+import fractions
 import math
+import random
+
 
 primes = list([2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61])
 
@@ -24,13 +27,14 @@ def memoize(func):
 
 @memoize
 def search_prime(index):
-    step = 0
-    number = primes[1]
+    step = len(primes)
+    number = primes[-1]
+
     while step != index:
         number += 1
         prime = True
-        for s in range(1, step // 2, 2):
-            if (number // search_prime(s)) == 0:
+        for s in range(1, len(primes) - 1):
+            if (number % search_prime(s)) == 0:
                 prime = False
                 break
 
@@ -103,3 +107,41 @@ def fast_get_factors(roof):
 def phi(n):
     (p, q) = fast_get_factors(n)
     return (p-1) * (q-1)
+
+
+def coprimes(limit):
+    coprimes = []
+    p = phi(limit)
+    for e in range(2, p):
+        if fractions.gcd(e, p) == 1:
+            coprimes = [e] + coprimes
+
+    return coprimes
+
+
+def coprime(limit):
+    random.seed()
+    coprimes_list = coprimes(limit)
+    if len(coprimes_list) > 1:
+        return coprimes_list[random.randint(1, len(coprimes_list)) - 1]
+
+    return coprimes_list[0]
+
+
+def public_key(limit):
+    return (coprime(limit), limit)
+
+
+def private_key(public_key):
+    step = 1
+    p = phi(public_key[1])
+
+    while (step * public_key[0]) % p != 1:
+        print(step, public_key[0], (step * public_key[0]) % p, 1)
+        step += 1
+
+    return (step, public_key[1])
+
+
+def generate_base(index, index2):
+    return search_prime(index) * search_prime(index2)

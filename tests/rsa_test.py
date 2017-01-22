@@ -1,5 +1,13 @@
 import unittest
-from katas.rsa import get_factors, fast_get_factors, phi
+import random
+import fractions
+from katas.rsa import (get_factors,
+                       fast_get_factors,
+                       phi,
+                       coprime,
+                       search_prime,
+                       public_key,
+                       private_key)
 
 class GenerateBase(unittest.TestCase):
     def test_get_factors_of_any_mutiplication_of_primes_given_the_product(self):
@@ -59,3 +67,43 @@ class PrivateAndPublicKeys(unittest.TestCase):
 
         for (result, factors) in prime_products:
             self.assertEqual(phi(factors[0] * factors[1]), result)
+
+
+    def test_coprime_of_given_number(self):
+        prime_products = [ 15, 35, 8633]
+
+        for prime_product in prime_products:
+            t = phi(prime_product)
+            c = coprime(prime_product)
+            self.assertEqual(fractions.gcd(prime_product, t), 1)
+
+
+    def test_public_key_is_coprime_between_e_and_n(self):
+        random.seed()
+        for e in range(1, 100):
+            p = search_prime(random.randint(5, 20))
+            q = search_prime(random.randint(8, 20))
+
+            n = p * q
+            t = phi(n)
+            pk = public_key(n)
+
+            self.assertEqual(fractions.gcd(pk[0], t), 1)
+            self.assertEqual(pk[1], n)
+
+
+    def test_public_key_is_coprime_between_e_and_n(self):
+        random.seed()
+        for e in range(1, 10):
+            p = search_prime(random.randint(3, 8))
+            q = search_prime(random.randint(3, 8))
+
+            n = p * q
+            t = phi(n)
+            pk = public_key(n)
+            ik = private_key(pk)
+
+            self.assertEqual(pk[1], ik[1])
+            self.assertEqual(pk[1], n)
+            self.assertEqual((pk[0] * ik[0]) % t, 1)
+
