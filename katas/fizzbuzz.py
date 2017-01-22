@@ -16,3 +16,13 @@ def fizzbuzz(input):
     )
 
     return [join(f, b) for (f, b) in zip(fizz(input), buzz(input))]
+
+
+def minify_fizzbuzz(input, fizz=3, buzz=5):
+    fizzbuzz = fizz * buzz
+    return [(
+        ((x % fizzbuzz == 0) and "FizzBuzz") or
+        ((x % fizz == 0) and "Fizz") or
+        ((x % buzz == 0) and "Buzz") or
+        x
+    ) for x in input]
