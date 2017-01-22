@@ -1,5 +1,5 @@
 import unittest
-from katas.fizzbuzz import fizz, buzz
+from katas.fizzbuzz import fizz, buzz, fizzbuzz
 
 
 def multiples(base, limit=100):
@@ -50,3 +50,13 @@ class TestBuzz(unittest.TestCase):
       non_multiples_list = no_multiples(5, 100)
       self.assertEqual(buzz(non_multiples_list), non_multiples_list, "Non multiples of three must remains equals")
 
+
+class TestFizzBuzz(unittest.TestCase):
+  def test_if_FizzBuzz_is_substituted_instead_of_multiples_of_three_and_five(self):
+      multiples_list = multiples(15, 100)
+      fizz_list = ['FizzBuzz'] * len(multiples_list)
+      self.assertEqual(fizzbuzz(multiples_list), fizz_list, "All multiples of three must be subtituted by 'Fizz'")
+
+  def test_non_multiples_of_five_remains_equals(self):
+      non_multiples_list = no_multiples(15, 100)
+      self.assertEqual(buzz(non_multiples_list), non_multiples_list, "Non multiples of three must remains equals")
