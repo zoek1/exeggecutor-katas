@@ -46,8 +46,6 @@ def first_prime_before(roof):
 
     while search_prime(index) < split_roof:
         index += 1
-        print("roof", index)
-
 
     return (search_prime(index), index)
 
@@ -100,3 +98,8 @@ def fast_get_factors(roof):
                 return sorted([step, roof // step])
 
     return []
+
+
+def phi(n):
+    (p, q) = fast_get_factors(n)
+    return (p-1) * (q-1)

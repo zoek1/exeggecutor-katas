@@ -1,5 +1,5 @@
 import unittest
-from katas.rsa import get_factors, fast_get_factors
+from katas.rsa import get_factors, fast_get_factors, phi
 
 class GenerateBase(unittest.TestCase):
     def test_get_factors_of_any_mutiplication_of_primes_given_the_product(self):
@@ -45,3 +45,17 @@ class GenerateFastFactors(unittest.TestCase):
             val = fast_get_factors(t)
 
             self.assertEqual(val, [])
+
+
+class PrivateAndPublicKeys(unittest.TestCase):
+    def test_phi_as_product_of_factor1_minus_one_and_factor2_two_minus_one(self):
+        prime_products = [
+            (2, [2, 3]),
+            (8, [3, 5]),
+            (24, [5, 7]),
+            (8448, [89,97]),
+            (25271064, [8893, 2843])
+        ]
+
+        for (result, factors) in prime_products:
+            self.assertEqual(phi(factors[0] * factors[1]), result)
