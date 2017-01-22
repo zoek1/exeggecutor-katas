@@ -2,23 +2,51 @@ import unittest
 from katas.fizzbuzz import fizz, buzz
 
 
+def multiples(base, limit=100):
+    """the most simple generator of multiples"""
+    if limit < 0:
+        return []
+
+    if base == 0:
+        return [0]
+
+    return [base * limit for step in range(1, limit)]
+
+
+def no_multiples(base, limit=100):
+    """the most simple generator of non multiples"""
+    no_multiples = []
+
+    if base in [1, -1] or limit < 1:
+        return []
+
+    if base == 0:
+        return list(range(1, limit))
+
+    while len(no_multiples) < limit:
+        no_multiples = [(base * len(no_multiples)) - 1] + no_multiples
+
+    return no_multiples
+
+
 class TestFizz(unittest.TestCase):
   def test_if_fizz_is_substituted_instead_of_multiples_of_three(self):
-      multiples = [3, 6, 9, 12]
-      fizz_list = ['Fizz'] * len(multiples)
-      self.assertEqual(fizz(multiples), fizz_list, "All multiples of three must be subtituted by 'Fizz'")
+      multiples_list = multiples(3, 100)
+      fizz_list = ['Fizz'] * len(multiples_list)
+      self.assertEqual(fizz(multiples_list), fizz_list, "All multiples of three must be subtituted by 'Fizz'")
 
   def test_non_multiples_of_three_remains_equals(self):
-      non_multiples = [7, 8, 11, 17, 13, 19]
-      self.assertEqual(fizz(non_multiples), non_multiples, "Non multiples of three must remains equals")
+      non_multiples_list = no_multiples(3, 100)
+      self.assertEqual(fizz(non_multiples_list), non_multiples_list, "Non multiples of three must remains equals")
+
 
 class TestBuzz(unittest.TestCase):
   def test_if_Buzz_is_substituted_instead_of_multiples_of_five(self):
-      multiples = [5, 10, 15, 20, 25, 30, 35]
-      fizz_list = ['Buzz'] * len(multiples)
-      self.assertEqual(buzz(multiples), fizz_list, "All multiples of three must be subtituted by 'Fizz'")
+      multiples_list = multiples(5, 100)
+      fizz_list = ['Buzz'] * len(multiples_list)
+      self.assertEqual(buzz(multiples_list), fizz_list, "All multiples of three must be subtituted by 'Fizz'")
 
   def test_non_multiples_of_five_remains_equals(self):
-      non_multiples = [3, 4, 7, 8, 9, 11, 17, 13, 19]
-      self.assertEqual(buzz(non_multiples), non_multiples, "Non multiples of three must remains equals")
+      non_multiples_list = no_multiples(5, 100)
+      self.assertEqual(buzz(non_multiples_list), non_multiples_list, "Non multiples of three must remains equals")
 
