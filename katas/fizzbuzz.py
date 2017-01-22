@@ -26,3 +26,11 @@ def minify_fizzbuzz(input, fizz=3, buzz=5):
         ((x % buzz == 0) and "Buzz") or
         x
     ) for x in input]
+
+
+if __name__ == '__main__':
+    r = range(1, 101)
+    fb = minify_fizzbuzz(r)
+
+    for index in r:
+        print("{}: {}".format(index, fb[index - 1]))
