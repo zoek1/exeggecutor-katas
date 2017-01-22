@@ -69,3 +69,34 @@ def get_factors(product):
         total = product - (search_prime(multiplicand) * search_prime(multiplier))
 
     return sorted([search_prime(multiplicand), search_prime(multiplier)])
+
+
+def simple_test_prime(number):
+    if (number == 2):
+        return True
+
+    if (number % 2 == 0):
+        return False
+
+    for i in range(3, number // 2, 2):
+        if number != i and number % i == 0:
+            return False
+
+    return True
+
+
+def fast_get_factors(roof):
+    factors = []
+
+    if roof % 2 == 0:
+        if simple_test_prime(roof // 2):
+            return sorted([2, roof // 2])
+        else:
+            return []
+
+    for step in range(3, roof // 2, 2):
+        if roof % step == 0:
+            if simple_test_prime(step) and simple_test_prime(roof // step):
+                return sorted([step, roof // step])
+
+    return []
