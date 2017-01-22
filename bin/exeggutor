@@ -1,0 +1,34 @@
+#!/bin/bash
+
+PYTHON="env python"
+PIP="env pip"
+
+case "$1" in 
+	test | t )
+		TEST="${2:-fizzbuzz}_test"
+		${PYTHON} -m unittest tests.${TEST}
+		${PYTHON} -m unittest tests.${TEST}
+	;;
+	run | r )
+		KATA=katas/${2:-fizzbuzz}.py
+		${PYTHON} ${KATA}
+	;;
+	list | l)
+		for kata in $(ls katas/*.py); do
+	           STRIP_POSTFIX=${kata/%.py/}
+		   KATA=${STRIP_POSTFIX/#katas\//}
+		   if [ ${KATA} != "__init__" ]; then
+			   echo ${KATA}
+		   fi
+	 done
+	 ;;
+	*)
+		cat << END
+Los comandos disponibles son:
+
+	test | t  [test_kata]           - ejecuta las pruebas del conjunto indicado
+	run  | r  [kata]                - ejecuta la kata seleccionada
+	list | l  [katas]               - lista las katas disponibles
+END
+	;;
+esac
