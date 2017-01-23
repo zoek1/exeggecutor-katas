@@ -137,7 +137,6 @@ def private_key(public_key):
     p = phi(public_key[1])
 
     while (step * public_key[0]) % p != 1:
-        print(step, public_key[0], (step * public_key[0]) % p, 1)
         step += 1
 
     return (step, public_key[1])
@@ -164,8 +163,8 @@ def cipher(publick, msg):
 
 
 def decipher(private, msg):
-    b = [chr((x ** private[0]) % private[1]) for x in msg]
-    return "".join(b)
+    b = [unichr((x ** private[0]) % private[1]) for x in msg]
+    return u"".join(b).decode('string-escape')
 
 
 if __name__ == "__main__":
@@ -188,20 +187,20 @@ if __name__ == "__main__":
         print("Select option")
 
         option = input("""
-        1. cipher
-        2. decipher
-        3. exit
+1. cipher
+2. decipher
+3. exit
         """)
 
         try:
             option = int(option)
             if option == 1:
-                text = input("Introduce the text")
+                text = input("Introduce the text: ")
                 print(json.dumps(cipher(public, text), separators=[',', ':']))
                 next
 
             if option == 2:
-                text = input("introduce the text to decipher")
+                text = input("introduce the text to decipher: ")
                 text = json.loads(text)
                 print(decipher(private, text))
                 next
