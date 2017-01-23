@@ -7,7 +7,10 @@ from katas.rsa import (get_factors,
                        coprime,
                        search_prime,
                        public_key,
-                       private_key)
+                       private_key,
+                       keygen,
+                       cipher,
+                       decipher)
 
 class GenerateBase(unittest.TestCase):
     def test_get_factors_of_any_mutiplication_of_primes_given_the_product(self):
@@ -107,3 +110,8 @@ class PrivateAndPublicKeys(unittest.TestCase):
             self.assertEqual(pk[1], n)
             self.assertEqual((pk[0] * ik[0]) % t, 1)
 
+
+    def test_cypher_and_decypher_message(self):
+        msg = 'Hello World!'
+        (public, private) = keygen()
+        self.assertEqual(decipher(private, cipher(public, msg)), msg)

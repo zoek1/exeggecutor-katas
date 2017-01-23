@@ -145,3 +145,24 @@ def private_key(public_key):
 
 def generate_base(index, index2):
     return search_prime(index) * search_prime(index2)
+
+
+def keygen(base1=random.randint(3, 8), base2=random.randint(3, 8)):
+    p = search_prime(base1)
+    q = search_prime(base2)
+
+    product = p * q
+
+    publick = public_key(product)
+    privatek = private_key(publick)
+
+    return publick, privatek
+
+
+def cipher(publick, msg):
+    return [(ord(x) ** publick[0]) % publick[1] for x in msg]
+
+
+def decipher(private, msg):
+    b = [chr((x ** private[0]) % private[1]) for x in msg]
+    return "".join(b)
