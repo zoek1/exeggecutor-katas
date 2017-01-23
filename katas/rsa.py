@@ -166,3 +166,48 @@ def cipher(publick, msg):
 def decipher(private, msg):
     b = [chr((x ** private[0]) % private[1]) for x in msg]
     return "".join(b)
+
+
+if __name__ == "__main__":
+    from builtins import input
+    msg = """
+    1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.
+    2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.
+    3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Laws
+    """
+
+    (public, private) = keygen()
+    import json
+    print("Your public key is : ({}, {})".format(public[0], public[1]))
+    print("Your private key is : ({}, {})".format(private[0], private[1]))
+
+    while True:
+        import sys
+        sys.stdout.flush()
+
+        print("Select option")
+
+        option = input("""
+        1. cipher
+        2. decipher
+        3. exit
+        """)
+
+        try:
+            option = int(option)
+            if option == 1:
+                text = input("Introduce the text")
+                print(json.dumps(cipher(public, text), separators=[',', ':']))
+                next
+
+            if option == 2:
+                text = input("introduce the text to decipher")
+                text = json.loads(text)
+                print(decipher(private, text))
+                next
+
+            if option == 3:
+                break
+        except Exception as e:
+            print(e)
+            print("Unknown option")
