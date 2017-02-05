@@ -1,4 +1,4 @@
-from future.utils import lmap
+from future.utils import lmap # pragma: no cover
 
 def fizz(input):
     return lmap(lambda x: (x % 3 == 0 and "Fizz") or x, input)
@@ -28,7 +28,7 @@ def minify_fizzbuzz(input, fizz=3, buzz=5):
     ) for x in input]
 
 
-if __name__ == '__main__':
+if __name__ == '__main__': # pragma: no cover
     r = range(1, 101)
     fb = minify_fizzbuzz(r)
 

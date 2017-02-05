@@ -2,6 +2,16 @@ from functools import wraps
 import fractions
 import math
 import random
+import logging
+import logging.config
+import hashlib
+import os
+
+_ROOT = __file__.rsplit('/')
+_ROOT = os.path.abspath("/".join(_ROOT[:_ROOT.index('katas') ]))
+print(os.path.join(_ROOT, 'logging.conf'))
+logging.config.fileConfig(os.path.join(_ROOT, 'logging.conf'))
+log = logging.getLogger('kata')
 
 
 primes = list([2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61])
@@ -146,7 +156,9 @@ def generate_base(index, index2):
     return search_prime(index) * search_prime(index2)
 
 
-def keygen(base1=random.randint(3, 8), base2=random.randint(3, 8)):
+def keygen(base1=random.randint(3, 20), base2=random.randint(5, 20)):
+    import fractions
+
     p = search_prime(base1)
     q = search_prime(base2)
 
@@ -154,20 +166,35 @@ def keygen(base1=random.randint(3, 8), base2=random.randint(3, 8)):
 
     publick = public_key(product)
     privatek = private_key(publick)
+    t = phi(product)
+
+    assert fractions.gcd(publick[0], t) == 1
+    assert publick[1] == privatek[1] == product
+    assert ((publick[0] * privatek[0]) % t) == 1
 
     return publick, privatek
 
 
 def cipher(publick, msg):
-    return [(ord(x) ** publick[0]) % publick[1] for x in msg]
+    m = hashlib.md5()
+    m.update("".join(map(str, [ord(x) for x in msg])))
+
+    log.debug("Fingerprint of data to cypher: {}".format(m.hexdigest()))
+
+    return [(long(ord(x)) ** publick[0]) % publick[1] for x in msg]
 
 
 def decipher(private, msg):
-    b = [unichr((x ** private[0]) % private[1]) for x in msg]
+    m = hashlib.md5()
+    m.update("".join(map(str, [(x ** private[0]) % private[1] for x in msg])))
+
+    log.debug("Fingerprint of data deciphered: {}".format(m.hexdigest()))
+
+    b = [unichr(int((x ** private[0]) % private[1])) for x in msg]
     return u"".join(b).decode('string-escape')
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     from builtins import input
     msg = """
     1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.

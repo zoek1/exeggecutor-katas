@@ -71,3 +71,6 @@ class TestMinifyFizzBuzz(unittest.TestCase):
       non_multiples_list = no_multiples(15, 100)
       self.assertEqual(minify_fizzbuzz(non_multiples_list), non_multiples_list, "Non multiples of three must remains equals")
 
+
+if __name__ == '__main__':
+    unittest.main()

@@ -90,22 +90,9 @@ class PrivateAndPublicKeys(unittest.TestCase):
             n = p * q
             t = phi(n)
             pk = public_key(n)
-
-            self.assertEqual(fractions.gcd(pk[0], t), 1)
-            self.assertEqual(pk[1], n)
-
-
-    def test_public_key_is_coprime_between_e_and_n(self):
-        random.seed()
-        for e in range(1, 10):
-            p = search_prime(random.randint(3, 8))
-            q = search_prime(random.randint(3, 8))
-
-            n = p * q
-            t = phi(n)
-            pk = public_key(n)
             ik = private_key(pk)
 
+            self.assertEqual(fractions.gcd(pk[0], t), 1)
             self.assertEqual(pk[1], ik[1])
             self.assertEqual(pk[1], n)
             self.assertEqual((pk[0] * ik[0]) % t, 1)
@@ -115,3 +102,7 @@ class PrivateAndPublicKeys(unittest.TestCase):
         msg = 'Hello World!'
         (public, private) = keygen()
         self.assertEqual(decipher(private, cipher(public, msg)), msg)
+
+
+if __name__ == '__main__':
+    unittest.main()
